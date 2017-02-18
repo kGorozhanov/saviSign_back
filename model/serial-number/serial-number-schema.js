@@ -5,6 +5,7 @@ const Product = require('../product/product-schema')
 
 const serialNumberSchema = new Schema({
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    serialPrefix: { type: String, required: true },
     licenseCount: { type: Number, required: true },
     testPeriod: { type: Number, required: true },
     comments: { type: String, required: false },
