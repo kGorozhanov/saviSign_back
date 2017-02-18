@@ -10,6 +10,10 @@ const session = require('express-session');
 const connectMongo = require('connect-mongo');
 var MongoStore = connectMongo(session);
 
+// const CryptoJS = require('crypto-js');
+// let encrypted = CryptoJS.AES.encrypt('Message', '1');
+// console.log(encrypted.toString());
+// console.log(CryptoJS.AES.decrypt(encrypted.toString(), '1').toString(CryptoJS.enc.Utf8))
 const config = require('./config');
 const routes = require('./routes');
 const seed = require('./seed');
