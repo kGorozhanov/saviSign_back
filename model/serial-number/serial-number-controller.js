@@ -47,7 +47,7 @@ class SerialNumberController extends Controller {
     }
 
     create(req, res, next) {
-        req.body.serialNumber = this.makeKey(req.body.productId, req.body.serialPrefix);
+        req.body.serialNumber = this.makeKey(req.body.product.productId, req.body.serialPrefix);
         this.model.create(req.body)
             .then(doc => res.status(201).json(doc))
             .catch(err => next(err));
