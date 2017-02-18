@@ -24,8 +24,9 @@ class SerialNumberController extends Controller {
                 query[key] = new RegExp('^' + req.query[key]);
             }
         }
+        options.populate = 'product';
         return this.model.paginate(query, options)
-            .then(collection => this.model.populate(collection, { path: 'product' }))
+            // .then(collection => this.model.populate(collection, { path: 'product' }))
             .then(collection => res.status(200).json(collection))
             .catch(err => next(err));
     }
