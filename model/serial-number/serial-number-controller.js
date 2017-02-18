@@ -64,8 +64,8 @@ class SerialNumberController extends Controller {
     }
 
     makeKey(productId, serialPrefix) {
-        sectionsCount = 3;
-        letters = 5;
+        let sectionsCount = 3;
+        let letters = 5;
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         var sections = [
             productId,
