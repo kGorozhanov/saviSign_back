@@ -28,14 +28,14 @@ class SerialNumberController extends Controller {
         return this.model.paginate(query, options)
             // .then(collection => this.model.populate(collection, { path: 'product' }))
             .then(collection => {
-                if (order.sort === 'product.productId') {
+                if (options.sort === 'product.productId') {
                     collection.docs.sort((a, b) => {
                         if (a.product.productId < b.product.productId) return -1;
                         if (a.product.productId > b.product.productId) return 1;
                         return 0;
                     })
                 }
-                if (order.sort === '-product.productId') {
+                if (options.sort === '-product.productId') {
                     collection.docs.sort((a, b) => {
                         if (a.product.productId > b.product.productId) return -1;
                         if (a.product.productId < b.product.productId) return 1;
