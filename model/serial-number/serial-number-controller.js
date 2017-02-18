@@ -26,7 +26,6 @@ class SerialNumberController extends Controller {
         }
         options.populate = 'product';
         return this.model.paginate(query, options)
-            // .then(collection => this.model.populate(collection, { path: 'product' }))
             .then(collection => {
                 if (options.sort === 'product.productId') {
                     collection.docs.sort((a, b) => {
@@ -47,6 +46,13 @@ class SerialNumberController extends Controller {
             .catch(err => next(err));
     }
 
+    create(req, res, next) {
+        req.body.serialNumber = this.makeKey(req.body.productId, req.body.serialPrefix);
+        this.model.create(req.body)
+            .then(doc => res.status(201).json(doc))
+            .catch(err => next(err));
+    }
+
     remove(req, res, next) {
         this.model.remove(req.params.id)
             .then(doc => {
@@ -55,6 +61,24 @@ class SerialNumberController extends Controller {
                 return res.status(204).end();
             })
             .catch(err => next(err));
+    }
+
+    makeKey(productId, serialPrefix) {
+        sectionsCount = 3;
+        letters = 5;
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var sections = [
+            productId,
+            serialPrefix
+        ];
+        for (var section = 0; section < sectionsCount; section++) {
+            var text = "";
+            for (var i = 0; i < letters; i++) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            sections.push(text);
+        }
+        return sections.join('-');
     }
 }
 

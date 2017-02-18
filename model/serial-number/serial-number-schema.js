@@ -9,6 +9,7 @@ const serialNumberSchema = new Schema({
     licenseCount: { type: Number, required: true },
     testPeriod: { type: Number, required: true },
     comments: { type: String, required: false },
+    serialNumber: { type: String, required: true },
     dateCreate: { type: Date, default: Date.now }
 });
 
