@@ -1,4 +1,4 @@
-const controller = require('./serial-number-controller');
+const controller = require('./serial-group-controller');
 const Router = require('express').Router;
 const auth = require('../../auth/auth.service');
 const router = new Router();

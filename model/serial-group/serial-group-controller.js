@@ -1,8 +1,9 @@
 var Controller = require('../../lib/controller');
-var SerialNumber = require('./serial-number-facade');
+var SerialGroup = require('./serial-group-facade');
+var Serial = require('./../serial/serial-facade');
 var async = require('async');
 
-class SerialNumberController extends Controller {
+class SerialGroupController extends Controller {
 
     find(req, res, next) {
         let options = {};
@@ -47,18 +48,17 @@ class SerialNumberController extends Controller {
     }
 
     create(req, res, next) {
-        req.body.serialNumber = this.makeKey(req.body.product.productId, req.body.serialPrefix);
         this.model.create(req.body)
-            .then(doc => res.status(201).json(doc))
-            .catch(err => next(err));
-    }
-
-    remove(req, res, next) {
-        this.model.remove(req.params.id)
             .then(doc => {
-                if (!doc) return res.status(404).end();
-
-                return res.status(204).end();
+                let serials = [];
+                for(let i = 0; i < doc.serialsCount; i++) {
+                    serials.push({
+                        serialGroup: doc,
+                        key: this.makeKey(req.body.product.productId, req.body.serialPrefix)
+                    });
+                }
+                Serial.create(serials)
+                    .then(serials => res.status(201).json(doc));
             })
             .catch(err => next(err));
     }
@@ -66,7 +66,7 @@ class SerialNumberController extends Controller {
     makeKey(productId, serialPrefix) {
         let sectionsCount = 3;
         let letters = 5;
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#@";
         var sections = [
             productId,
             serialPrefix
@@ -82,4 +82,4 @@ class SerialNumberController extends Controller {
     }
 }
 
-module.exports = new SerialNumberController(SerialNumber);
+module.exports = new SerialGroupController(SerialGroup);

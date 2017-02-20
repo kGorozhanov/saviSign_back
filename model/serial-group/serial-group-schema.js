@@ -3,16 +3,16 @@ const mongoosePaginate = require('mongoose-paginate');
 const Schema = mongoose.Schema;
 const Product = require('../product/product-schema')
 
-const serialNumberSchema = new Schema({
+const serialGroupSchema = new Schema({
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     serialPrefix: { type: String, required: true },
     licenseCount: { type: Number, required: true },
     testPeriod: { type: Number, required: true },
     comments: { type: String, required: false },
-    serialNumber: { type: String, required: true },
+    serialsCount: { type: Number, required: true },
     dateCreate: { type: Date, default: Date.now }
 });
 
-serialNumberSchema.plugin(mongoosePaginate);
+serialGroupSchema.plugin(mongoosePaginate);
 
-module.exports = mongoose.model('SerialNumber', serialNumberSchema);
+module.exports = mongoose.model('SerialGroup', serialGroupSchema);
