@@ -54,6 +54,7 @@ class SerialGroupController extends Controller {
                 for(let i = 0; i < doc.serialsCount; i++) {
                     serials.push({
                         serialGroup: doc,
+                        licenseCount: doc.licenseCount,
                         key: this.makeKey(req.body.product.productId, req.body.serialPrefix)
                     });
                 }

@@ -7,6 +7,7 @@ const SerialGroup = require('./../serial-group/serial-group-schema');
 const serialSchema = new Schema({
     serialGroup: { type: mongoose.Schema.Types.ObjectId, ref: 'SerialGroup' },
     key: { type: String, required: true },
+    licenseCount: { type: Number, required: true },
     dateCreate: { type: Date, default: Date.now }
 });
 
