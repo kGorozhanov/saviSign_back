@@ -57,7 +57,7 @@ class SerialGroupController extends Controller {
                         key: this.makeKey(req.body.product.productId, req.body.serialPrefix)
                     });
                 }
-                Serial.create(serials[0])
+                return Serial.create(serials[0])
                     .then(serials => res.status(201).json(doc));
             })
             .catch(err => next(err));
