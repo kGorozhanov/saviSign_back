@@ -63,7 +63,7 @@ class SerialGroupController extends Controller {
                     .catch(err => done(null, err));
                 }, (err) => {
                     if(err) return err;
-                    return doc;
+                    res.status(201).json(doc)
                 });
             })
             .catch(err => next(err));
