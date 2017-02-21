@@ -77,6 +77,7 @@ class SerialGroupController extends Controller {
                 return Serial
                     .removeCollection({ serialGroup: doc._id });
             })
+            .then(() => res.status(204).end())
             .catch(err => next(err));
     }
 
