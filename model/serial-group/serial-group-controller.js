@@ -51,7 +51,7 @@ class SerialGroupController extends Controller {
         this.model.create(req.body)
             .then(doc => {
                 let serials = [];
-                for(let i = 0; i < doc.serialsCount; i++) {
+                for (let i = 0; i < doc.serialsCount; i++) {
                     serials.push({
                         serialGroup: doc,
                         licenseCount: doc.licenseCount,
@@ -60,12 +60,30 @@ class SerialGroupController extends Controller {
                 }
                 return async.eachSeries(serials, (item, done) => {
                     Serial.create(item)
-                    .then(() => done())
-                    .catch(err => done(null, err));
+                        .then(() => done())
+                        .catch(err => done(null, err));
                 }, (err) => {
-                    if(err) return err;
+                    if (err) return err;
                     res.status(201).json(doc)
                 });
+            })
+            .catch(err => next(err));
+    }
+
+    remove(req, res, next) {
+        this.model.remove(req.params.id)
+            .then(doc => {
+                if (!doc) { return res.status(404).end(); }
+                Serial.find({ serialGroup: doc._id })
+                    .then(serials => {
+                        async.eachSeries(serials, (serial, asyncdone) => {
+                            Serial.remove(serial._id)
+                                .then(res => asyncdone())
+                                .catch(err => asyncdone(null, err));
+                        }, () => {
+                            return res.status(204).end();
+                        });
+                    });
             })
             .catch(err => next(err));
     }
