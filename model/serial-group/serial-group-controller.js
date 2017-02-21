@@ -74,16 +74,10 @@ class SerialGroupController extends Controller {
         this.model.remove(req.params.id)
             .then(doc => {
                 if (!doc) { return res.status(404).end(); }
-                Serial.find({ serialGroup: doc._id })
-                    .then(serials => {
-                        async.eachSeries(serials, (serial, asyncdone) => {
-                            Serial.remove(serial._id)
-                                .then(res => asyncdone())
-                                .catch(err => asyncdone(null, err));
-                        }, () => {
-                            return res.status(204).end();
-                        });
-                    });
+                return Serial
+                    .find({ serialGroup: doc._id })
+                    .remove()
+                    .exec();
             })
             .catch(err => next(err));
     }
