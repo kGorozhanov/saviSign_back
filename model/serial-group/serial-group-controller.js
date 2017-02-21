@@ -58,6 +58,7 @@ class SerialGroupController extends Controller {
                         key: this.makeKey(req.body.product.productId, req.body.serialPrefix)
                     });
                 }
+                console.log('generated starting save')
                 return Serial.createCollection(serials)
                     .then(() => res.status(201).json(doc))
                 // return async.eachSeries(serials, (item, done) => {
