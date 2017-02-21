@@ -45,7 +45,7 @@ class SerialController extends Controller {
             .then(doc => {
                 return this.model.find({serialGroup: doc._id})
                     .then(docs => {
-                        return SerialGroup.update({_id: doc._id}, {licenseCount: docs.length});
+                        return SerialGroup.update({_id: doc._id}, {serialsCount: docs.length});
                     });
             })
             .then(doc => res.status(204).end())
