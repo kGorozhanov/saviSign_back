@@ -1,5 +1,6 @@
 var Controller = require('../../lib/controller');
 var Serial = require('./serial-facade');
+var SerialGroup = require('./../serial-group/serial-group-facade');
 var async = require('async');
 
 class SerialController extends Controller {
@@ -21,7 +22,7 @@ class SerialController extends Controller {
         let query = {};
         if (req.query) {
             for (let key in req.query) {
-                if(key === 'serialGroup') {
+                if (key === 'serialGroup') {
                     query[key] = req.query[key];
                 } else {
                     query[key] = new RegExp(req.query[key]);
@@ -32,6 +33,20 @@ class SerialController extends Controller {
             .then(collection => {
                 res.status(200).json(collection)
             })
+            .catch(err => next(err));
+    }
+
+    remove(req, res, next) {
+        this.model.remove(req.params.id)
+            .then(doc => {
+                if (!doc) { return res.status(404).end(); }
+                return SerialGroup.findById(doc.serialGroup)
+            })
+            .then(doc => {
+                doc.licenseCount--;
+                return SerialGroup.update({_id: doc._id}, doc);
+            })
+            .then(doc => res.status(204).end())
             .catch(err => next(err));
     }
 }
