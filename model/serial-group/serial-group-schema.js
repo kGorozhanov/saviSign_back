@@ -14,5 +14,6 @@ const serialGroupSchema = new Schema({
 });
 
 serialGroupSchema.plugin(mongoosePaginate);
+// serialGroupSchema.index({'$**': 'text'});
 
 module.exports = mongoose.model('SerialGroup', serialGroupSchema);

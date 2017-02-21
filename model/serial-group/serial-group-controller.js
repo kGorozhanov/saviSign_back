@@ -51,15 +51,27 @@ class SerialGroupController extends Controller {
         this.model.create(req.body)
             .then(doc => {
                 let serials = [];
-                for (let i = 0; i < doc.serialsCount; i++) {
-                    serials.push({
-                        serialGroup: doc,
+                let serialsCollection = [];
+                const makeUniqualKey = () => {
+                    let key = this.makeKey(req.body.product.productId, req.body.serialPrefix);
+                    if(serials.indexOf(key) === -1) {
+                        serials.push(key);
+                    } else {
+                        makeUniqualKey();
+                    }
+                }
+                for (let i = doc.serialsCount; i > 0; i--) {
+                    makeUniqualKey();
+                }
+                for (let i = doc.serialsCount -1; i >= 0; i--) {
+                    serialsCollection.push({
+                        serialGroup: doc._id,
                         licenseCount: doc.licenseCount,
-                        key: this.makeKey(req.body.product.productId, req.body.serialPrefix)
+                        key: serials[i]
                     });
                 }
                 console.log('generated starting save')
-                return Serial.createCollection(serials)
+                return Serial.createCollection(serialsCollection)
                     .then(() => res.status(201).json(doc))
                 // return async.eachSeries(serials, (item, done) => {
                 //     Serial.create(item)

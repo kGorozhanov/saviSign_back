@@ -24,7 +24,7 @@ class SerialController extends Controller {
                 if(key === 'serialGroup') {
                     query[key] = req.query[key];
                 } else {
-                    query[key] = new RegExp('^' + req.query[key]);
+                    query[key] = new RegExp(req.query[key]);
                 }
             }
         }
