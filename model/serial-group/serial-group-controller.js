@@ -22,12 +22,19 @@ class SerialGroupController extends Controller {
         let query = {};
         if (req.query) {
             for (let key in req.query) {
-                query[key] = new RegExp('^' + req.query[key]);
+                if(key !== 'productId') {
+                    query[key] = new RegExp(req.query[key]);
+                }
             }
         }
         options.populate = 'product';
         return this.model.paginate(query, options)
             .then(collection => {
+                if(req.query.productId) {
+                    collection.docs = collection.docs.filter((item) => {
+                        return item.product.productId.indexOf(req.query.productId) !== -1
+                    });
+                }
                 if (options.sort === 'product.productId') {
                     collection.docs.sort((a, b) => {
                         if (a.product.productId < b.product.productId) return -1;
