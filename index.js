@@ -46,7 +46,7 @@ app.use(session({
   resave: false,
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
-    db: 'ipgard'
+    db: 'savisign'
   })
 }));
 

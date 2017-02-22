@@ -66,6 +66,7 @@ class SerialGroupController extends Controller {
                 for (let i = doc.serialsCount -1; i >= 0; i--) {
                     serialsCollection.push({
                         serialGroup: doc._id,
+                        product: doc.product,
                         licenseCount: doc.licenseCount,
                         key: serials[i]
                     });
