@@ -22,7 +22,7 @@ class SerialController extends Controller {
         let query = {};
         if (req.query) {
             for (let key in req.query) {
-                if (key === 'serialGroup') {
+                if (key === 'serialGroup' || key === dataIndex) {
                     query[key] = req.query[key];
                 } else {
                     query[key] = new RegExp(req.query[key]);
