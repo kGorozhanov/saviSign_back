@@ -49,7 +49,7 @@ class SearchController {
                     .then(docs => {
                         let filterd = docs.filter(item => {
                             if(item.productId.indexOf(query) !== -1) return true;
-                            if(item.serialPrefix.indexOf(query) !== -1) return true;
+                            if(item.name.indexOf(query) !== -1) return true;
                             return false;
                         });
 

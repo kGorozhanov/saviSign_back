@@ -7,7 +7,7 @@ autoIncrement.initialize(mongoose);
 
 const productSchema = new Schema({
     productId: {type: String, required: true},
-    serialPrefix: {type: String, required: true},
+    name: {type: String, required: true},
     dateCreate: { type: Date, default: Date.now }
 });
 

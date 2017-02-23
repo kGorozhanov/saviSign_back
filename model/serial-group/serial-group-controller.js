@@ -81,14 +81,6 @@ class SerialGroupController extends Controller {
                 console.log('generated starting save')
                 return Serial.createCollection(serialsCollection)
                     .then(() => res.status(201).json(doc))
-                // return async.eachSeries(serials, (item, done) => {
-                //     Serial.create(item)
-                //         .then(() => done())
-                //         .catch(err => done(null, err));
-                // }, (err) => {
-                //     if (err) return err;
-                //     res.status(201).json(doc)
-                // });
             })
             .catch(err => next(err));
     }
