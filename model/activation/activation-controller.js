@@ -44,7 +44,7 @@ class ActivationController extends Controller {
             .then(serial => {
                 if (!serial) {
                     activation.status = false;
-                    activation.reason = 'Serial number not registered';
+                    activation.reason = 'This serial number is not registered';
                     return Promise.resolve();
                 }
                 if (serial.licenseCount === 31 || serial.licenseCount > serial.activationsCount) {
@@ -56,7 +56,7 @@ class ActivationController extends Controller {
                     });
                 } else {
                     activation.status = false;
-                    activation.reason = 'All licenses activated';
+                    activation.reason = 'All licenses for this serial number activated';
                     return Promise.resolve();
                 }
             })

@@ -16,7 +16,7 @@ const activationSchema = new Schema({
     city:           { type: String, required: true },
     address:        { type: String, required: true },
     phone:          { type: String, required: true },
-    ipAddress:      { type: String, required: true },
+    // ipAddress:      { type: String, required: true },
     reason:         { type: String, required: false },
     status:         { type: Boolean, required: true },
     activationKey:  { type: String },
