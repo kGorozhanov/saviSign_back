@@ -21,6 +21,6 @@ router.use('/serials', serial);
 
 router.use('/search', search);
 
-router.use('./activations', activation);
+router.use('/activations', activation);
 
 module.exports = router;
