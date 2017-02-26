@@ -13,6 +13,7 @@ const serialSchema = new Schema({
     serialGroup: { type: mongoose.Schema.Types.ObjectId, ref: 'SerialGroup' },
     key: { type: String, required: true },
     licenseCount: { type: Number, required: true },
+    activationsCount: { type: Number, default: 0 },
     dateCreate: { type: Date, default: Date.now }
 });
 
