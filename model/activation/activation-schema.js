@@ -20,6 +20,7 @@ const activationSchema = new Schema({
     activationCode: { type: String, required: true },
     reason:         { type: String, required: false },
     status:         { type: Boolean, required: true },
+    activationKey:  { type: String },
     dateCreate:     { type: Date, default: Date.now }
 });
 

@@ -1,6 +1,7 @@
 var Controller = require('../../lib/controller');
 var Activation = require('./activation-facade');
 var Serial = require('../serial/serial-facade');
+const encode = require('../../lib/encode');
 var async = require('async');
 
 class ActivationController extends Controller {
@@ -37,20 +38,32 @@ class ActivationController extends Controller {
     }
 
     create(req, res, next) {
+        let activation = req.body;
         Serial.findOne({ key: req.serial })
             .then(serial => {
+                if (!serial) {
+                    activation.status = false;
+                    activation.reason = 'Serial number not registered';
+                    return Promise.resolve();
+                }
                 if (serial.licenseCount === 31 || serial.licenseCount > serial.activationsCount) {
+                    let serialInfo = activation.serial.split('-');
+                    activation.activationKey = encode.makeActivatedKey(serialInfo[0], serialInfo[1], 10, serial.licenseCount);
                     return Serial.update({ _id: serial._id }, {
                         activationsCount: serial.activationsCount + 1
                     });
                 } else {
-                    let err = new Error('All licenses activated');
-                    err.status = 403;
-                    return err;
+                    activation.status = false;
+                    activation.reason = 'All licenses activated';
+                    return Promise.resolve();
                 }
             })
-            .then(() => this.model.create(req.body))
-            .then(doc => res.status(201).json(doc))
+            .then(() => {
+                this.model.create(activation)
+            })
+            .then(doc => {
+                res.status(201).json(doc);
+            })
             .catch(err => next(err));
     }
 
