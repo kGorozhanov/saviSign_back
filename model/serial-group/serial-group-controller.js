@@ -22,7 +22,7 @@ class SerialGroupController extends Controller {
         let query = {};
         if (req.query) {
             for (let key in req.query) {
-                if(key !== 'productId') {
+                if (key !== 'productId') {
                     query[key] = new RegExp(req.query[key]);
                 }
             }
@@ -30,7 +30,7 @@ class SerialGroupController extends Controller {
         options.populate = 'product';
         return this.model.paginate(query, options)
             .then(collection => {
-                if(req.query.productId) {
+                if (req.query.productId) {
                     collection.docs = collection.docs.filter((item) => {
                         return item.product.productId.indexOf(req.query.productId) !== -1
                     });
@@ -54,6 +54,18 @@ class SerialGroupController extends Controller {
             .catch(err => next(err));
     }
 
+    findById(req, res, next) {
+        return this.model.findById(req.params.id)
+            .then(doc => {
+                if (!doc) { return res.status(404).end(); }
+                return this.model.populate(doc, {path: 'product'});
+            })
+            .then((doc) => {
+                res.status(200).json(doc);
+            })
+            .catch(err => next(err));
+    }
+
     create(req, res, next) {
         this.model.create(req.body)
             .then(doc => {
@@ -61,7 +73,7 @@ class SerialGroupController extends Controller {
                 let serialsCollection = [];
                 const makeUniqualKey = () => {
                     let key = this.makeKey(req.body.product.productId, req.body.serialPrefix);
-                    if(serials.indexOf(key) === -1) {
+                    if (serials.indexOf(key) === -1) {
                         serials.push(key);
                     } else {
                         makeUniqualKey();
@@ -70,7 +82,7 @@ class SerialGroupController extends Controller {
                 for (let i = doc.serialsCount; i > 0; i--) {
                     makeUniqualKey();
                 }
-                for (let i = doc.serialsCount -1; i >= 0; i--) {
+                for (let i = doc.serialsCount - 1; i >= 0; i--) {
                     serialsCollection.push({
                         serialGroup: doc._id,
                         product: doc.product,
