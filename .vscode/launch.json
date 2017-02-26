@@ -15,7 +15,7 @@
             "type": "node",
             "request": "attach",
             "name": "Подключиться к процессу",
-            "port": 5858
+            "port": 8080
         }
     ]
 }
