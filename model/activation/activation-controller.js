@@ -69,21 +69,19 @@ class ActivationController extends Controller {
             .catch(err => next(err));
     }
 
-    // remove(req, res, next) {
-    //     this.model.remove(req.params.id)
-    //         .then(doc => {
-    //             if (!doc) { return res.status(404).end(); }
-    //             return SerialGroup.findById(doc.serialGroup)
-    //         })
-    //         .then(doc => {
-    //             return this.model.find({serialGroup: doc._id})
-    //                 .then(docs => {
-    //                     return SerialGroup.update({_id: doc._id}, {serialsCount: docs.length});
-    //                 });
-    //         })
-    //         .then(doc => res.status(204).end())
-    //         .catch(err => next(err));
-    // }
+    remove(req, res, next) {
+        this.model.remove(req.params.id)
+            .then(doc => {
+                if (!doc) { return res.status(404).end(); }
+                return Serial.findOne(doc.serial);
+            })
+            .then(doc => {
+                if(!doc) { return res.status(404).end(); }
+                return Serial.update({_id: doc._id}, {activationsCount: doc.activationsCount - 1});
+            })
+            .then(doc => res.status(204).end())
+            .catch(err => next(err));
+    }
 }
 
 module.exports = new ActivationController(Activation);
