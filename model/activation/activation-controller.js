@@ -79,6 +79,7 @@ class ActivationController extends Controller {
         this.model.remove(req.params.id)
             .then(doc => {
                 if (!doc) { return res.status(404).end(); }
+                if(!doc.status) { return res.status(204).end() }
                 return Serial.findOne(doc.serial);
             })
             .then(doc => {
