@@ -4,7 +4,7 @@ const config = {
     port: process.env.PORT || 8080
   },
   mongo: {
-    url: process.env.NODE_ENV === 'prod' ? '' : 'mongodb://localhost/savisign'
+    url: process.env.NODE_ENV === 'prod' ? 'mongodb://superadmin:123123@ds163699.mlab.com:63699/savisign' : 'mongodb://localhost/savisign'
   },
   secrets: {
     session: 'ipgard-secret'
