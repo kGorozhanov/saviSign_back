@@ -23,11 +23,11 @@ class ActivationController extends Controller {
         let query = {};
         if (req.query) {
             for (let key in req.query) {
-                // if (key === 'serialGroup' || key === 'docIndex') {
-                //     query[key] = req.query[key];
-                // } else {
-                query[key] = new RegExp(req.query[key]);
-                // }
+                if (key === 'status') {
+                    query[key] = req.query[key];
+                } else {
+                    query[key] = new RegExp(req.query[key]);
+                }
             }
         }
         return this.model.paginate(query, options)
@@ -76,8 +76,8 @@ class ActivationController extends Controller {
                 return Serial.findOne(doc.serial);
             })
             .then(doc => {
-                if(!doc) { return res.status(404).end(); }
-                return Serial.update({_id: doc._id}, {activationsCount: doc.activationsCount - 1});
+                if (!doc) { return res.status(404).end(); }
+                return Serial.update({ _id: doc._id }, { activationsCount: doc.activationsCount - 1 });
             })
             .then(doc => res.status(204).end())
             .catch(err => next(err));
