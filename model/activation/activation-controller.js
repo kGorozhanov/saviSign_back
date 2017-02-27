@@ -23,7 +23,7 @@ class ActivationController extends Controller {
         let query = {};
         if (req.query) {
             for (let key in req.query) {
-                if (key === 'status') {
+                if (key === 'status' || key === 'docIndex') {
                     query[key] = req.query[key];
                 } else if (key === 'startDate') {
                     query.dateCreate = query.dateCreate || {};
