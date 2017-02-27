@@ -25,6 +25,12 @@ class ActivationController extends Controller {
             for (let key in req.query) {
                 if (key === 'status') {
                     query[key] = req.query[key];
+                } else if (key === 'startDate') {
+                    query.dateCreate = query.dateCreate || {};
+                    query.dateCreate['$gte'] = req.query[key];
+                } else if (key === 'endDate') {
+                    query.dateCreate = query.dateCreate || {};
+                    query.dateCreate['$lte'] = req.query[key];
                 } else {
                     query[key] = new RegExp(req.query[key]);
                 }
