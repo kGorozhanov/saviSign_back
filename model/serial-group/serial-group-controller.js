@@ -1,6 +1,8 @@
 var Controller = require('../../lib/controller');
 var SerialGroup = require('./serial-group-facade');
 var Serial = require('./../serial/serial-facade');
+var Activation = require('./../activation/activation-facade');
+var Product = require('./../product/product-facade');
 var async = require('async');
 
 class SerialGroupController extends Controller {
@@ -101,8 +103,25 @@ class SerialGroupController extends Controller {
         this.model.remove(req.params.id)
             .then(doc => {
                 if (!doc) { return res.status(404).end(); }
-                return Serial
-                    .removeCollection({ serialGroup: doc._id });
+                async.parallel([
+                    (asyncdone) => {
+                        Serial.removeCollection({serialGroup: doc._id})
+                            .then(() => asyncdone())
+                            .catch(err => asyncdone(err));
+                    },
+                    (asyncdone) => {
+                        Product.findById(doc.product)
+                            .then(product => {
+                                let search = new RegExp('^' + product.productId + '-' + doc.serialPrefix);
+                                return Activation.removeCollection({serial: search});
+                            })
+                            .then(() => asyncdone())
+                            .catch(err => asyncdone(err));
+                    }
+                ], (err) => {
+                    if(err) return next(err);
+                    return res.status(204).end();
+                })
             })
             .then(() => res.status(204).end())
             .catch(err => next(err));

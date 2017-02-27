@@ -11,7 +11,7 @@ autoIncrement.initialize(mongoose);
 const serialSchema = new Schema({
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     serialGroup: { type: mongoose.Schema.Types.ObjectId, ref: 'SerialGroup' },
-    key: { type: String, required: true },
+    key: { type: String, unique : true, required: true },
     licenseCount: { type: Number, required: true },
     activationsCount: { type: Number, default: 0 },
     dateCreate: { type: Date, default: Date.now }

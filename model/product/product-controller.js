@@ -2,6 +2,7 @@ var Controller = require('../../lib/controller');
 var Product = require('./product-facade');
 var Serial = require('./../serial/serial-facade');
 var SerialGroup = require('./../serial-group/serial-group-facade');
+var Activation = require('./../activation/activation-facade');
 var async = require('async');
 
 class ProductController extends Controller {
@@ -43,6 +44,12 @@ class ProductController extends Controller {
                     },
                     (asyncdone) => {
                         SerialGroup.removeCollection({product: doc._id})
+                            .then(() => asyncdone())
+                            .catch(err => asyncdone(err));
+                    },
+                    (asyncdone) => {
+                        let prodIdReg = new RegExp('^' + doc.productId);
+                        Activation.removeCollection({serial: prodIdReg})
                             .then(() => asyncdone())
                             .catch(err => asyncdone(err));
                     }

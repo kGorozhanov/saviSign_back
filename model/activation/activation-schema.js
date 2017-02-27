@@ -19,7 +19,7 @@ const activationSchema = new Schema({
     // ipAddress:      { type: String, required: true },
     reason:         { type: String, required: false },
     status:         { type: Boolean, required: true },
-    activationKey:  { type: String },
+    activationKey:  { type: String, unique : true },
     dateCreate:     { type: Date, default: Date.now }
 });
 

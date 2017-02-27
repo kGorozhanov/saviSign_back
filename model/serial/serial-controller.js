@@ -1,6 +1,7 @@
 var Controller = require('../../lib/controller');
 var Serial = require('./serial-facade');
 var SerialGroup = require('./../serial-group/serial-group-facade');
+var Activation = require('./../activation/activation-facade');
 var async = require('async');
 
 class SerialController extends Controller {
@@ -40,15 +41,30 @@ class SerialController extends Controller {
         this.model.remove(req.params.id)
             .then(doc => {
                 if (!doc) { return res.status(404).end(); }
-                return SerialGroup.findById(doc.serialGroup)
+                async.parallel([
+                    (asyncdone) => {
+                        let serialGroupId;
+                        SerialGroup.findById(doc.serialGroup)
+                            .then(serialGroup => {
+                                serialGroupId = serialGroup._id;
+                                return this.model.find({ serialGroup: serialGroup._id })
+                            })
+                            .then(docs => {
+                                return SerialGroup.update({ _id: serialGroupId }, { serialsCount: docs.length });
+                            })
+                            .then(() => asyncdone())
+                            .catch(err => asyncdone(err));
+                    },
+                    (asyncdone) => {
+                        Activation.removeCollection({ serial: doc.key })
+                            .then(() => asyncdone())
+                            .catch(err => asyncdone(err));
+                    }
+                ], (err) => {
+                    if (err) return next(err);
+                    return res.status(204).end();
+                })
             })
-            .then(doc => {
-                return this.model.find({serialGroup: doc._id})
-                    .then(docs => {
-                        return SerialGroup.update({_id: doc._id}, {serialsCount: docs.length});
-                    });
-            })
-            .then(doc => res.status(204).end())
             .catch(err => next(err));
     }
 }

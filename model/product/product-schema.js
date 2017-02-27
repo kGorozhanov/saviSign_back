@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 autoIncrement.initialize(mongoose);
 
 const productSchema = new Schema({
-    productId: {type: String, required: true},
+    productId: {type: String, unique : true, required: true},
     name: {type: String, required: true},
     dateCreate: { type: Date, default: Date.now }
 });
