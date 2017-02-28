@@ -3,6 +3,7 @@ var SerialGroup = require('./serial-group-facade');
 var Serial = require('./../serial/serial-facade');
 var Activation = require('./../activation/activation-facade');
 var Product = require('./../product/product-facade');
+const encode = require('../../lib/encode');
 var async = require('async');
 
 class SerialGroupController extends Controller {
@@ -74,7 +75,7 @@ class SerialGroupController extends Controller {
                 let serials = [];
                 let serialsCollection = [];
                 const makeUniqualKey = () => {
-                    let key = this.makeKey(req.body.product.productId, req.body.serialPrefix);
+                    let key = encode.makeSerialKey(req.body.product.productId, req.body.serialPrefix, doc.testPeriod, doc.licenseCount);
                     if (serials.indexOf(key) === -1) {
                         serials.push(key);
                     } else {
@@ -125,24 +126,6 @@ class SerialGroupController extends Controller {
             })
             .then(() => res.status(204).end())
             .catch(err => next(err));
-    }
-
-    makeKey(productId, serialPrefix) {
-        let sectionsCount = 3;
-        let letters = 5;
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#@";
-        var sections = [
-            productId,
-            serialPrefix
-        ];
-        for (var section = 0; section < sectionsCount; section++) {
-            var text = "";
-            for (var i = 0; i < letters; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            sections.push(text);
-        }
-        return sections.join('-');
     }
 }
 

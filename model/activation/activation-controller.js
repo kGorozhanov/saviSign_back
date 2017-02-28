@@ -55,7 +55,7 @@ class ActivationController extends Controller {
                 }
                 if (serial.licenseCount === 31 || serial.licenseCount > serial.activationsCount) {
                     let serialInfo = activation.serial.split('-');
-                    activation.activationKey = encode.makeActivatedKey(serialInfo[0], serialInfo[1], 10, serial.licenseCount);
+                    activation.activationKey = encode.makeActivatedKey(serialInfo[0], activation.machineId);
                     activation.status = true;
                     return Serial.update({ _id: serial._id }, {
                         activationsCount: serial.activationsCount + 1
