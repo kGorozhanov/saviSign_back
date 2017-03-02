@@ -45,7 +45,6 @@ class ActivationController extends Controller {
 
     create(req, res, next) {
         let activation = req.body;
-        console.log(activation);
         Serial.findOne({ key: activation.serial })
             .then(serial => {
                 if (!serial) {
@@ -80,7 +79,6 @@ class ActivationController extends Controller {
             .then(doc => {
                 if (!doc) { return res.status(404).end(); }
                 if(!doc.status) { return res.status(204).end() }
-                console.log(doc.serial);
                 return Serial.findOne({key: doc.serial});
             })
             .then(doc => {
