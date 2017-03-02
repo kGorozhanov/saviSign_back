@@ -25,6 +25,8 @@ class ActivationController extends Controller {
             for (let key in req.query) {
                 if (key === 'status' || key === 'docIndex') {
                     query[key] = req.query[key];
+                } else if (key === 'serial') {
+                    query[key] = new RegExp(req.query[key].replace(/\$/g, '\\$'));
                 } else if (key === 'startDate') {
                     query.dateCreate = query.dateCreate || {};
                     query.dateCreate['$gte'] = req.query[key];
